@@ -13,6 +13,7 @@
         <module>servlet02</module>
         <module>servlet03</module>
         <module>servlet04</module>
+        <module>jdbc_review</module>
     </modules>
 <dependencies>
     <dependency>

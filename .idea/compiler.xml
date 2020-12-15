@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="servlet03" />
         <module name="servlet04" />
+        <module name="jdbc_review" />
         <module name="servlet01" />
         <module name="servlet02" />
       </profile>
