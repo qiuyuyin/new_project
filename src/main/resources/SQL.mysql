@@ -1,0 +1,161 @@
+select * from users;
+insert into users (id, name, password, email, birthday)
+values (?,?,?,?,?);
+show columns from users;
+
+show tables;
+create table goods(
+                      id int primary key ,
+                      owner varchar(40),
+                      place varchar(40)
+);
+show status ;
+show create database jdbc;
+show create table goods;
+#CREATE DATABASE `jdbc` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */
+# CREATE TABLE `goods` (
+                                   #                          `id` int NOT NULL,
+                                   #                          `owner` varchar(40) DEFAULT NULL,
+                                   #                          `place` varchar(40) DEFAULT NULL,
+                                   #                          PRIMARY KEY (`id`)
+                                       # ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+#检索单个列
+show grants ;
+select id from users;
+#检索多个列
+select id ,name from users;
+#检索所有列
+select * from users;
+#检索多个列（并且列中的元素值必须不同
+select distinct password from users;
+#限制检索得到的结果
+select id from users limit 2;
+#限制检索得到的结果(从第几行开始检索几行）
+select id from users limit 1,2;
+
+
+select email from users;
+select email from users order by email;#按照email的顺序进行排序
+select email from users order by id;#按照id的顺序进行排序
+#按照多个列进行排序
+select *from users order by password,email;
+#指定排序的方向，其他的等同于上面的进行排序；
+select *from users order by password desc ,email;
+
+#使用where进行过滤数据
+select *from users where id=2;
+select *from users where id<>2;
+select * from users where id between 2 and 4;
+select * from users where id is not null ;
+select * from users where id is null ;
+
+#and操作符号
+select * from users where id >2 and name is not null;
+#or操作符号
+select * from users where id >2 or name is not null;
+select * from users where id >2 or name is not null order by id desc limit 2;
+select  * from users where not id in (2,4);
+select  * from users where not id between 2 and 3;
+
+#Like操作符
+#1.%通配符
+select  * from users where email like '%@qq.com';
+select  * from users where birthday like '2000%';
+#2._通配符
+select  * from users where password like '_____6';
+select  * from users where password like '123___';
+
+# **使用正则表达式进行过滤**:
+select  * from users where password regexp '123456|222222';
+select  * from users where password regexp '.*';
+
+#拼接字段：
+select concat(id,'(',name,')') from users order by email;
+#使用别名：
+select concat(id,'(',name,')') as vend_title from users order by email;
+#执行算数运算：
+select id ,id*10 as expand from users where id = 3;
+
+
+
+select email , upper(email) as Upper_email from users order by email;
+select email , lower(email) as Upper_email from users order by email;
+select email , left(email,1) as Upper_email from users order by email;
+select email , right(email,3) as Upper_email from users order by email;
+select email , soundex(email) as Upper_email from users order by email;
+
+select current_date;
+select current_timestamp();
+select current_time();
+select localtime();
+select datediff('2020-12-16 10:59:50','2020-12-15 10:59:51');
+select timediff('2020-12-15 10:59:50','2020-12-15 10:59:51');
+
+#常用数值处理函数
+select pi();
+select abs(-10);
+select cos(-10);
+select exp(-10);
+select mod(10,3);
+select rand();
+
+#平均值函数进行汇总
+select avg(id) as avg_id from users;
+select sum(id) as sum_id from users;
+select max(id) as max_id from users;
+select min(id) as min_id from users;
+select count(id) as count from users;
+#在进行这种运算的时候是可以使用distinct函数的
+create table sort(
+    id int,
+    num int
+);
+
+select id ,max(num) ,avg(num) as num_prods from sort group by id;
+select id ,max(num) ,avg(num) as num_prods from sort group by id  order by id desc ;
+select id ,max(num) ,avg(num) as num_prods from sort group by id with rollup ;
+
+select u.id , max(u.num) from sort u where id>1 group by u.id having count(*)>2 order by u.id desc limit 2;
+
+#1.将子查询作为限定语句去进行寻找
+select id ,password from users where id in(select s.id from sort s where num between 1 and 9);
+#2.将子查询的结果进行展示
+select id , password, email, birthday,(select count(*) from sort where sort.id=users.id) as count from users order by id;
+#内部连接：
+select u.id ,u.email, u.password ,s.num  from users u inner join sort s on u.id=s.id;
+# 外部联结
+select s.id ,u.email, u.password ,s.num  from users u right join sort s on u.id=s.id;
+#自然联结
+select s.id ,u.email, u.password ,s.num  from users u , sort s where u.id=s.id;
+#笛卡尔联结
+select s.id ,u.email, u.password ,s.num  from users u , sort s ;
+
+INSERT INTO jdbc.users (
+                        id, name, password, email, birthday
+                        ) VALUES (
+                                  6, null, null, null, null);
+
+update users
+set password = '123000'
+where id = 1;
+
+delete from users where id = 6;
+
+
+select  last_insert_id() ;
+CREATE TABLE insect
+(
+    id     int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    name   VARCHAR(30)  NOT NULL default '张三', # type of insect
+    date   DATE         NOT NULL default '2020-10-12', # date collected
+    origin VARCHAR(30)  NOT NULL  # where collected
+);
+INSERT INTO jdbc.insect (  origin) VALUES ( '日本');
+drop table insect;
+alter table users add column vend varchar(20) not null default '123';
+alter table users drop column vend;
+alter table users change column vend vend_list int not null ;
+alter table  goods  rename to good;
+drop
+table if exists good;
+drop database if exists jdbc;
