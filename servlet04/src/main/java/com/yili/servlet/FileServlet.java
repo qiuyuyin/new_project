@@ -33,16 +33,12 @@ public class FileServlet extends HttpServlet {
 
         String realPath = this.getServletContext().getRealPath("WEB-INF/upload");
         File uploadFile = new File(realPath);
-        System.out.println(realPath+"");
-        System.out.println("---------");
         if(!uploadFile.exists()){
             uploadFile.mkdir();
         }
 
         String tmpPath = this.getServletContext().getRealPath("WEB-INF/tmp");
         File tmpFile = new File(tmpPath);
-        System.out.println(tmpPath+"");
-
         if(!tmpFile.exists()){
             tmpFile.mkdir();
         }
@@ -84,7 +80,7 @@ public class FileServlet extends HttpServlet {
             @Override
             public void update(long l, long l1, int i) {
                 // 总大小表示为l1，已经上传的大小为l
-                System.out.println("总大小："+l1+"已经上传了："+l);
+                System.out.println("文件大小为：" + l + ",当前已处理：" + l1);
             }
         });
         servletFileUpload.setHeaderEncoding("utf-8");
@@ -109,7 +105,7 @@ public class FileServlet extends HttpServlet {
                 String filename = name.substring(name.lastIndexOf("/") + 1);
                 String fileExtName = name.substring(name.lastIndexOf(".") + 1);
 
-                String uuidPath = UUID.randomUUID().toString();
+
                 String uuidFileName = UUID.randomUUID().toString();
 
                 System.out.println(filename+"."+fileExtName);
@@ -120,7 +116,7 @@ public class FileServlet extends HttpServlet {
                 FileOutputStream fileOutputStream = new FileOutputStream(uploadPath + "/" + uuidFileName + "." + fileExtName);
                 System.out.println(uploadPath + "/" + uuidFileName + "." + fileExtName);
 
-                byte[] buffer = new byte[1024 * 1024];
+                byte[] buffer = new byte[1024];
 
                 int len = 0;
 
@@ -131,7 +127,7 @@ public class FileServlet extends HttpServlet {
                 fileOutputStream.close();
                 inputStream.close();
                 msg="文件上传成功！";
-//                fileItem.delete();
+                fileItem.delete();
             }
         }
         return msg;
